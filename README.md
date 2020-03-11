@@ -1,4 +1,4 @@
-# apd_proj_1
+# Analiza i przetwarzanie dźwięku - Projekt #1 
 
 
 ### Notes
