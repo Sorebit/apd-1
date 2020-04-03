@@ -33,6 +33,6 @@ C# / [NAudio](https://github.com/naudio/NAudio) / WinForms
 
 ## Links
 
-- [Course site, ](https://mini.pw.edu.pl/~rafalkoj/www/?Dydaktyka:2019%2F2020:-_Analiza_i_przetwarzanie_d%BCwi%EAku)
+- [Course site](https://mini.pw.edu.pl/~rafalkoj/www/?Dydaktyka:2019%2F2020:-_Analiza_i_przetwarzanie_d%BCwi%EAku)
 - [Separation of Voiced and Unvoiced using Zero crossing rate and Energy of the Speech Signal, *Bachu R.G., Kopparthi S., Adapa B., Barkana B.D.*](https://www.asee.org/documents/zones/zone1/2008/student/ASEE12008_0044_paper.pdf)
 - [Pitch Detection Methods, *Politechnika Gdańska*](https://sound.eti.pg.gda.pl/student/eim/synteza/leszczyna/index_ang.htm)

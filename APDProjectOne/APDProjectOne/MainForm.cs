@@ -177,7 +177,7 @@ namespace APDProjectOne
             CalculateHzcrr();
             hzcrrLabel.Text = "HZCRR: " + hzcrr.ToString();
 
-
+            // Detect voiceless speech
             CreateChart(voicelessChart, (DataTable dt) =>
             {
                 for (int n = 0; n < steData.Count; n++)
@@ -188,6 +188,7 @@ namespace APDProjectOne
                 return 0;
             });
 
+            // Detect voiced 
             CreateChart(voicedChart, (DataTable dt) =>
             {
                 for (int n = 0; n < steData.Count; n++)
