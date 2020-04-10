@@ -80,7 +80,6 @@ namespace APDProjectOne
         private void MainForm_Resize(object sender, EventArgs e)
         {
             // Resize waveViewer
-            // I hate WinForms for making this so hard or myself for not figuring an easier way
             int newX = (int)((this.Width * 230.0) / 1700.0);
             waveViewer.Location = new Point(newX, waveViewer.Location.Y);
             int newWidth = (int)((this.Width - waveViewer.Location.X) * 0.922);
@@ -121,7 +120,8 @@ namespace APDProjectOne
                 double sum = 0;
                 for (int i = 1; i < samplesRead; i++)
                     sum += Math.Abs(Math.Sign(frame[i]) - Math.Sign(frame[i - 1]));
-                return sum * sp.WaveFormat.SampleRate / (2.0 * samplesRead);
+                //return sum * sp.WaveFormat.SampleRate / (2.0 * samplesRead);
+                return sum / (2.0 * samplesRead);
             });
 
             PopulateChart(autocorChart, ref autocorData, (float[] frame, int samplesRead, ISampleProvider _) =>
@@ -156,9 +156,12 @@ namespace APDProjectOne
             // Calculate silence ratio
             CreateChart(srChart, (DataTable dt) =>
             {
-                for (int n = 0; n < zcrData.Count; n++)
+                int frameCount = zcrData.Count;
+                for (int n = 0; n < frameCount; n++)
                 {
-                    double value = (volumeData[n] < 0.02 && zcrData[n] < 50.0) ? 1.0 : 0.0;
+                    // 1.0 -> cisza
+                    double value = (volumeData[n] < 0.02 && zcrData[n] <= 0.5) ? 1.0 : 0.0;
+                    // Dodaj do wykresu
                     dt.Rows.Add(n, value);
                 }
 
@@ -182,7 +185,7 @@ namespace APDProjectOne
             {
                 for (int n = 0; n < steData.Count; n++)
                 {
-                    double value = (steData[n] < 0.03 && zcrData[n] > 6000.0) ? 1.0 : 0.0;
+                    double value = (steData[n] < 0.03 && zcrData[n] >= 0.13) ? 1.0 : 0.0;
                     dt.Rows.Add(n, value);
                 }
                 return 0;
@@ -193,7 +196,7 @@ namespace APDProjectOne
             {
                 for (int n = 0; n < steData.Count; n++)
                 {
-                    double value = (steData[n] >= 0.01 && zcrData[n] < 6000.0) ? 1.0 : 0.0;
+                    double value = (steData[n] >= 0.01 && zcrData[n] < 0.13) ? 1.0 : 0.0;
                     dt.Rows.Add(n, value);
                 }
                 return 0;
@@ -206,6 +209,7 @@ namespace APDProjectOne
             dataList = new List<double>();
             using (WaveFileReader reader = new WaveFileReader(filePath))
             {
+                // Convert to 32-bit floating point samples:
                 ISampleProvider sampleProvider = reader.ToSampleProvider();
                 int frameSizeBytes = sampleProvider.WaveFormat.AverageBytesPerSecond * frameLength / 1000;
                 int frameSizeFloats = frameSizeBytes / sizeof(double);
@@ -214,7 +218,7 @@ namespace APDProjectOne
                 List<double> tmpList = new List<double>();
                 CreateChart(chart, (DataTable dt) =>
                 {
-                    int frameNumber = 0;
+                    int frameNumber = 0;    
                     while (true)
                     {
                         int samplesRead = sampleProvider.Read(buffer, 0, frameSizeFloats);
@@ -341,3 +345,5 @@ namespace APDProjectOne
         }
     }
 }
+
+
